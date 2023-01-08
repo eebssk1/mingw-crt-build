@@ -1,0 +1,52 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  main:
+    name: main
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v1
+      - name: msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools autoconf-archive make patch git
+      - name: clone
+        shell: msys2 {0}
+        run: git clone --single-branch -b master https://git.code.sf.net/p/mingw-w64/mingw-w64 mingw-w64-mingw-w64
+      - name: pre
+        shell: msys2 {0}
+        run: ./pre.sh
+      - name: env data
+        run: |
+          $thetag=cat tag
+          $thetime=cat time
+          echo "my_tag=$thetag" >> $env:GITHUB_ENV
+          echo "my_time=$thetime" >> $env:GITHUB_ENV
+      - name: build64
+        env:
+          MSYSTEM: UCRT64
+        run: msys2 -c './build64.sh'
+      - name: build32
+        env:
+          MSYSTEM: MINGW32
+        run: msys2 -c './build32.sh'
+      - name: pack
+        shell: msys2 {0}
+        run: ./pack.sh
+      - name: upload
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          path: ./mingw-crt
+      - name: release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          artifacts: ./mingw-crt.tgz
+          body: ${{ env.my_time }}
+          commit: main
+          makeLatest: true
+          name: build_${{ env.my_tag }}
+          tag: ${{ env.my_tag }}

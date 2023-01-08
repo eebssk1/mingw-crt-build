@@ -1,0 +1,11 @@
+--- a/mingw-w64-crt/libsrc/msxml6.c	2023-01-09 01:41:48.420794300 +0800
++++ b/mingw-w64-crt/libsrc/msxml6.c	2023-01-09 01:44:43.405195800 +0800
+@@ -4,6 +4,7 @@
+  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
+  */
+ 
++#define __msxml_h__
+ #include <windows.h>
+ #include <initguid.h>
+-#include <msxml6.h>
++#include "msxml6.h"

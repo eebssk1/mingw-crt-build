@@ -16,18 +16,18 @@ mkdir build
 
 cd build
 
-export CFLAGS="-fdata-sections $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdata-sections $(cat $SDIR/f1.txt)"
+export CFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f1.txt)"
 
-../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=msvcrt --enable-wildcard --enable-experimental --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
+../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=msvcrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
 
 mv out ../
 
-export CFLAGS="-fdata-sections $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdata-sections $(cat $SDIR/f2.txt)"
+export CFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f2.txt)"
 
 rm -rf * .*
 
@@ -38,8 +38,8 @@ make install
 
 make distclean
 
-export CFLAGS="$(cat $SDIR/f2.txt)"
-export CXXFLAGS="$(cat $SDIR/f2.txt)"
+export CFLAGS="-march=prescott -static-libgcc $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-march=prescott -static-libgcc $(cat $SDIR/f2.txt)"
 
 ../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 

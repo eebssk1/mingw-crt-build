@@ -13,7 +13,7 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools autoconf-archive make patch git util-linux
+          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools mingw-w64-ucrt-x86_64-ccache mingw-w64-i686-ccache autoconf-archive make patch git util-linux
       - name: clone
         shell: msys2 {0}
         run: git clone --single-branch -b master https://git.code.sf.net/p/mingw-w64/mingw-w64 mingw-w64-mingw-w64
@@ -26,6 +26,12 @@ jobs:
           $thetime=cat time
           echo "my_tag=$thetag" >> $env:GITHUB_ENV
           echo "my_time=$thetime" >> $env:GITHUB_ENV
+      - name: restore cache
+        uses: actions/cache/restore@v3.2.4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\ccache
+          key:  mingw-crt-build_${{ env.my_tag }}
+          restore-keys: mingw-crt-build_
       - name: build64
         env:
           MSYSTEM: UCRT64
@@ -50,3 +56,10 @@ jobs:
           makeLatest: true
           name: build_${{ env.my_tag }}
           tag: ${{ env.my_tag }}
+      - name: ccache stats
+        run: msys2 -c 'ccache -s'
+      - name: save cache
+        uses: actions/cache/save@v3.2.4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\ccache
+          key:  mingw-crt-build_${{ env.my_tag }}

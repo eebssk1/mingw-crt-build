@@ -13,7 +13,7 @@ jobs:
         with:
           msystem: MSYS
           update: true
-          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools autoconf-archive make patch git
+          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools autoconf-archive make patch git util-linux
       - name: clone
         shell: msys2 {0}
         run: git clone -b master https://git.code.sf.net/p/mingw-w64/mingw-w64 mingw-w64-mingw-w64

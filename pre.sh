@@ -19,3 +19,9 @@ echo "UC: $(git rev-parse --short HEAD)" > ../time
 uuidgen -r |cut -d '-' -f 1 > ../tag
 date "+%Y-%m-%d_%H:%M:%S_%z" >> ../time
 
+if [ "x$(which ccache)" != "x" ]; then
+ccache -o compression_level=3
+ccache -o limit_multiple=0.7
+ccache -o sloppiness=random_seed
+ccache -o max_size=760M
+fi

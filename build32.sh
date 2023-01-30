@@ -16,6 +16,11 @@ mkdir build
 
 cd build
 
+if [ "x$(which ccache)" != "x" ]; then
+export CC="ccache gcc"
+export CXX="ccache g++"
+fi
+
 export CFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f1.txt)"
 export CXXFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f1.txt)"
 

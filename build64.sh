@@ -58,6 +58,9 @@ rm -rf * .*
 
 cd ..
 
+ar rcs out/lib/libssp.a
+ar rcs out/lib/libssp_nonshared.a
+
 mv out ../ucrt64
 
 cp -a /ucrt64/lib/default-manifest.o ../ucrt64/lib/

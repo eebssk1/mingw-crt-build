@@ -57,6 +57,9 @@ rm -rf * .*
 
 cd ..
 
+ar rcs out/lib/libssp.a
+ar rcs out/lib/libssp_nonshared.a
+
 mv out ../msvcrt32
 
 cp -a /mingw32/lib/default-manifest.o ../msvcrt32/lib/

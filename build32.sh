@@ -48,6 +48,8 @@ make distclean
 
 export CFLAGS="-flto=auto -march=prescott -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
 export CXXFLAGS="-flto=auo -march=prescott -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
+export LDFLAGS="-L$SDIR"
+export LIBS="-Wc,-llf32"
 
 ../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 

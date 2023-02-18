@@ -22,8 +22,11 @@ export CC="ccache gcc"
 export CXX="ccache g++"
 fi
 
-export CFLAGS="-fdata-sections -march=ivybridge $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f1.txt)"
+export AR="gcc-ar"
+export RANLIB="gcc-ranlib"
+
+export CFLAGS="-flto=auto -flto-partition=1to1 -flto-compression-level=8 -ffat-lto-objects -fdata-sections -march=ivybridge $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-flto=auto -flto-partition=1to1 -flto-compression-level=8 -ffat-lto-objects -fdata-sections -march=ivybridge $(cat $SDIR/f1.txt)"
 
 ../configure --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
@@ -32,8 +35,8 @@ make install
 
 mv out ../
 
-export CFLAGS="-fdata-sections -march=ivybridge $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f2.txt)"
+export CFLAGS="-flto=auto -flto-partition=1to1 -flto-compression-level=8 -ffat-lto-objects -fdata-sections -march=ivybridge $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-flto=auto -flto-partition=1to1 -flto-compression-level=8 -ffat-lto-objects -fdata-sections -march=ivybridge $(cat $SDIR/f2.txt)"
 
 rm -rf * .*
 
@@ -44,8 +47,8 @@ make install
 
 make distclean
 
-export CFLAGS="-flto=2 -march=ivybridge -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-flto=2 -march=ivybridge -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
+export CFLAGS="-flto=auto -march=ivybridge -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-flto=auto -march=ivybridge -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
 
 ../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 

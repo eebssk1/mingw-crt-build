@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache/restore@v3.2.4
         with:
           path: C:\Users\runneradmin\AppData\Local\ccache
-          key:  mingw-crt-build_${{ env.my_tag }}
+          key:  mingw-crt-build-l_${{ env.my_tag }}
           restore-keys: mingw-crt-build_
       - name: build64
         env:
@@ -47,19 +47,10 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           path: ./mingw-crt
-      - name: release
-        uses: ncipollo/release-action@v1.12.0
-        with:
-          artifacts: ./mingw-crt.tgz
-          body: ${{ env.my_time }}
-          commit: main
-          makeLatest: true
-          name: build_${{ env.my_tag }}
-          tag: ${{ env.my_tag }}
       - name: ccache stats
         run: msys2 -c 'ccache -s'
       - name: save cache
         uses: actions/cache/save@v3.2.4
         with:
           path: C:\Users\runneradmin\AppData\Local\ccache
-          key:  mingw-crt-build_${{ env.my_tag }}
+          key:  mingw-crt-build-l_${{ env.my_tag }}

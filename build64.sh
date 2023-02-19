@@ -22,8 +22,8 @@ export CC="ccache gcc"
 export CXX="ccache g++"
 fi
 
-export CFLAGS="-fdata-sections -march=ivybridge $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f1.txt)"
+export CFLAGS="-march=ivybridge $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f1.txt)"
 
 ../configure --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
@@ -32,8 +32,8 @@ make install
 
 mv out ../
 
-export CFLAGS="-fdata-sections -march=ivybridge $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=ivybridge $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor -march=ivybridge $(cat $SDIR/f2.txt)"
 
 rm -rf * .*
 

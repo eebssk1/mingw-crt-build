@@ -21,8 +21,8 @@ export CC="ccache gcc"
 export CXX="ccache g++"
 fi
 
-export CFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f1.txt)"
+export CFLAGS="-march=prescott $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f1.txt)"
 
 ../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=msvcrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
@@ -31,8 +31,8 @@ make install
 
 mv out ../
 
-export CFLAGS="-fdata-sections -march=prescott $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdata-sections -fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=prescott $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f2.txt)"
 
 rm -rf * .*
 

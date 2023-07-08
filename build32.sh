@@ -1,7 +1,7 @@
 #!/bin/sh
 
 checkreturn(){
-  if [ x$1 != x0 ]; then
+  if [ $1 -ne 0 ]; then
     exit $1
   fi
 }

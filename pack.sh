@@ -2,7 +2,7 @@
 
 mkdir mingw-crt
 
-cp -a ./ucrt64 ./msvcrt32 ./mingw-crt/
+cp -a ./ucrt64* ./msvcrt32 ./mingw-crt/
 
 cat time > mingw-crt/infs.txt
 cat tag >> mingw-crt/infs.txt

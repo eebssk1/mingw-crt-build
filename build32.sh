@@ -22,7 +22,7 @@ export CXX="ccache g++"
 fi
 
 export CFLAGS="-march=prescott $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=msvcrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
@@ -31,8 +31,8 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=prescott $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdeclone-ctor-dtor -march=prescott $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
@@ -43,8 +43,8 @@ make install
 
 make distclean
 
-export CFLAGS="-march=prescott -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-march=prescott -fdeclone-ctor-dtor -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=prescott $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 

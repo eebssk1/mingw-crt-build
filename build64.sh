@@ -29,7 +29,7 @@ ONAME=-legacy
 fi
 
 export CFLAGS="-march=$ARCH $(cat $SDIR/f1.txt)"
-export CXXFLAGS="-fdeclone-ctor-dtor -march=$ARCH $(cat $SDIR/f1.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../configure --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
@@ -38,8 +38,8 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=$ARCH $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdeclone-ctor-dtor -march=$ARCH $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=$ARCH -fdata-sections $(cat $SDIR/f2.txt)"
+export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
@@ -50,8 +50,8 @@ make install
 
 make distclean
 
-export CFLAGS="-flto=2 -march=$ARCH -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-flto=2 -march=$ARCH -static-libgcc -static-libstdc++ $(cat $SDIR/f2.txt)"
+export CFLAGS="-flto=auto -march=$ARCH $(cat $SDIR/f2.txt)"
+export CXXFLAGS="$CFLAGS"
 
 ../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 

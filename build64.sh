@@ -21,7 +21,7 @@ fi
 dobuild(){
 cd build
 
-ARCH=broadwell
+ARCH=haswell
 ONAME=
 if [ "$1" = "legacy" ]; then
 ARCH=x86-64-v2

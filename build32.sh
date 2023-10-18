@@ -24,7 +24,7 @@ fi
 export CFLAGS="-march=prescott $(cat $SDIR/f1.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=msvcrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
+../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install

@@ -25,3 +25,8 @@ ccache -o limit_multiple=0.7
 ccache -o sloppiness=random_seed
 ccache -o max_size=760M
 fi
+
+cd $SDIR
+
+curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/97351345/i686-w64-mingw32-cross.tgz" | tar -zxf -
+curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/97351345/x86_64-w64-mingw32-cross.tgz" | tar -zxf -

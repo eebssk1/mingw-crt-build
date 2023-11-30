@@ -16,19 +16,21 @@ mkdir build
 
 cd build
 
+export PATH=$SDIR/i686-w64-mingw32/bin:$PATH
+
 if [ "x$(which ccache)" != "x" ]; then
-export CC="ccache gcc"
-export CXX="ccache g++"
+export CC="ccache i686-w64-mingw32-gcc"
+export CXX="ccache i686-w64-mingw32-g++"
 fi
 
-export AR="gcc-ar"
-export NM="gcc-nm"
-export RANLIB="gcc-ranlib"
+export AR="i686-w64-mingw32-gcc-ar"
+export NM="i686-w64-mingw32-gcc-nm"
+export RANLIB="i686-w64-mingw32-gcc-ranlib"
 
 export CFLAGS="-march=prescott $(cat $SDIR/Z.txt) -flto=auto -ffat-lto-objects"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
+../configure --host=i686-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
@@ -40,7 +42,7 @@ export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
-../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-shared; checkreturn $?
+../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-shared; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
@@ -50,7 +52,7 @@ make distclean
 export CFLAGS="-march=prescott $(cat $SDIR/f2.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-../mingw-w64-libraries/winpthreads/configure --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
+../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
@@ -61,11 +63,11 @@ rm -rf * .*
 
 cd ..
 
-ar rcs out/lib/libssp.a
-ar rcs out/lib/libssp_nonshared.a
+i686-w64-mingw32-ar rcs out/lib/libssp.a
+i686-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
 
 mv out ../msvcrt32
 
-cp -a /mingw32/lib/default-manifest.o ../msvcrt32/lib/
+cp -a $SDIR/default-manifest_32.o ../msvcrt32/lib/default-manifest.o
 
 exit 0

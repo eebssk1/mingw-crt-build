@@ -21,7 +21,11 @@ export CC="ccache gcc"
 export CXX="ccache g++"
 fi
 
-export CFLAGS="-march=prescott $(cat $SDIR/f1.txt)"
+export AR="gcc-ar"
+export NM="gcc-nm"
+export RANLIB="gcc-ranlib"
+
+export CFLAGS="-march=prescott $(cat $SDIR/Z.txt) -flto=auto -ffat-lto-objects"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../configure --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
@@ -31,7 +35,7 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/f2.txt)"
+export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/Z.txt) -flto=auto -ffat-lto-objects"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*

@@ -4,44 +4,38 @@ on:
 jobs:
   main:
     name: main
-    runs-on: windows-latest
-    
+    runs-on: ubuntu-latest
+    container: ghcr.io/eebssk1/bbk/debian-bookworm:0.1
+
     steps:
       - uses: actions/checkout@v1
-      - name: msys2
-        uses: msys2/setup-msys2@v2
+      - name: dep
+        run: |
+          apt-get update
+          apt-get upgrade -y
+          apt-get install uuid-runtime -y
+      - name: enable ccache
+        uses: hendrikmuhs/ccache-action@v1.2
         with:
-          msystem: UCRT64
-          update: true
-          install: mingw-w64-ucrt-x86_64-toolchain mingw-w64-i686-toolchain mingw-w64-ucrt-x86_64-autotools mingw-w64-i686-autotools mingw-w64-ucrt-x86_64-ccache mingw-w64-i686-ccache autoconf-archive make patch git util-linux
+          verbose: 1
+          max-size: "1872M"
       - name: clone
-        shell: msys2 {0}
         run: git clone --single-branch -b master https://git.code.sf.net/p/mingw-w64/mingw-w64 mingw-w64-mingw-w64
       - name: pre
-        shell: msys2 {0}
         run: ./pre.sh
       - name: env data
         run: |
-          $thetag=cat tag
-          $thetime=cat time
-          echo "my_tag=$thetag" >> $env:GITHUB_ENV
-          echo "my_time=$thetime" >> $env:GITHUB_ENV
-      - name: restore cache
-        uses: actions/cache/restore@v3.2.4
-        with:
-          path: C:\Users\runneradmin\AppData\Local\ccache
-          key:  mingw-crt-build_${{ env.my_tag }}
-          restore-keys: mingw-crt-build_
+          export thetag=$(cat tag)
+          export thetime=$(cat time)
+          echo "my_tag=$thetag" >> $GITHUB_ENV
+          echo "my_time<<ENDR" >> $GITHUB_ENV
+          echo "$thetime" >> $GITHUB_ENV
+          echo "ENDR" >> $GITHUB_ENV
       - name: build64
-        env:
-          MSYSTEM: UCRT64
-        run: msys2 -c './build64.sh'
+        run: ./build64.sh
       - name: build32
-        env:
-          MSYSTEM: MINGW32
-        run: msys2 -c './build32.sh'
+        run: ./build32.sh
       - name: pack
-        shell: msys2 {0}
         run: ./pack.sh
       - name: upload
         uses: actions/upload-artifact@v3.1.2
@@ -56,10 +50,3 @@ jobs:
           makeLatest: true
           name: build_${{ env.my_tag }}
           tag: ${{ env.my_tag }}
-      - name: ccache stats
-        run: msys2 -c 'ccache -s'
-      - name: save cache
-        uses: actions/cache/save@v3.2.4
-        with:
-          path: C:\Users\runneradmin\AppData\Local\ccache
-          key:  mingw-crt-build_${{ env.my_tag }}

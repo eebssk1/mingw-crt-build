@@ -28,5 +28,5 @@ fi
 
 cd $SDIR
 
-curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/97351345/i686-w64-mingw32-cross.tgz" | tar -zxf -
-curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/97351345/x86_64-w64-mingw32-cross.tgz" | tar -zxf -
+curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/b047c5bd/i686-w64-mingw32-cross.tgz" | tar -zxf -
+curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/b047c5bd/x86_64-w64-mingw32-cross.tgz" | tar -zxf -

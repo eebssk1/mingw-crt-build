@@ -1,1 +1,1 @@
--pipe -Oz -g1 -malign-data=cacheline -momit-leaf-frame-pointer -mrelax-cmpxchg-loop -mtune=skylake -Wl,-O3,--relax,--sort-section=alignment,--sort-common=descending
+-pipe -Os -g1 -fipa-pta -fira-region=all -fgraphite -fgraphite-identity -flive-range-shrinkage -fsched-pressure -fsched-spec-load -ftree-lrs -malign-data=cacheline -mrelax-cmpxchg-loop -mtune=skylake -Wl,-O3,--relax,--sort-section=alignment,--sort-common=descending

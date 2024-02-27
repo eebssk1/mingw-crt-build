@@ -33,7 +33,10 @@ if [ "$1" = "legacy" ]; then
 ARCH=x86-64-v2
 ONAME=-legacy
 fi
-
+if [ "$1" = "legacy_super" ]; then
+ARCH=core2
+ONAME=-legacy_super
+fi
 export CFLAGS="-march=$ARCH $(cat $SDIR/Z.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
@@ -78,6 +81,7 @@ mv out ../ucrt64$ONAME
 cp -a $SDIR/default-manifest_64.o ../ucrt64$ONAME/lib/default-manifest.o
 }
 
+dobuild legacy_super
 dobuild legacy
 dobuild
 

@@ -37,22 +37,12 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/Z.txt) -flto=auto -ffat-lto-objects"
+export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/f.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
-../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-shared; checkreturn $?
-
-make -j3 all; checkreturn $?
-make install
-
-make distclean
-
-export CFLAGS="-march=prescott $(cat $SDIR/f2.txt)"
-export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
-
-../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
+../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install

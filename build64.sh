@@ -30,7 +30,7 @@ cd build
 ARCH=haswell
 ONAME=
 if [ "$1" = "legacy" ]; then
-ARCH=x86-64-v2
+ARCH=ivybridge
 ONAME=-legacy
 fi
 if [ "$1" = "legacy_super" ]; then
@@ -47,22 +47,12 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=$ARCH -fdata-sections $(cat $SDIR/Z.txt) -flto=auto -ffat-lto-objects"
+export CFLAGS="-march=$ARCH -fdata-sections $(cat $SDIR/f.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
-../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-shared; checkreturn $?
-
-make -j3 all; checkreturn $?
-make install
-
-make distclean
-
-export CFLAGS="-march=$ARCH $(cat $SDIR/f2.txt)"
-export CXXFLAGS="$CFLAGS"
-
-../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out --disable-static; checkreturn $?
+../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install

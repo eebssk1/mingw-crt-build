@@ -40,7 +40,7 @@ jobs:
       - name: upload
         uses: actions/upload-artifact@v3.1.2
         with:
-          path: ./mingw-crt
+          path: ./mingw-crt.tar
       - name: release
         uses: ncipollo/release-action@v1.12.0
         with:

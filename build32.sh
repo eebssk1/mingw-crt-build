@@ -16,21 +16,25 @@ mkdir build
 
 cd build
 
-export PATH=$SDIR/i686-w64-mingw32/bin:$PATH
+export PATH=$SDIR/x86_64-w64-mingw32/bin:$PATH
 
 if [ "x$(which ccache)" != "x" ]; then
-export CC="ccache i686-w64-mingw32-gcc"
-export CXX="ccache i686-w64-mingw32-g++"
+export CC="ccache x86_64-w64-mingw32-gcc -m32"
+export CXX="ccache x86_64-w64-mingw32-g++ -m32"
+else
+export CC="x86_64-w64-mingw32-gcc -m32"
+export CXX="x86_64-w64-mingw32-g++ -m32"
 fi
 
-export AR="i686-w64-mingw32-gcc-ar"
-export NM="i686-w64-mingw32-gcc-nm"
-export RANLIB="i686-w64-mingw32-gcc-ranlib"
+
+export AR="x86_64-w64-mingw32-gcc-ar"
+export NM="x86_64-w64-mingw32-gcc-nm"
+export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 
 export CFLAGS="-march=prescott $(cat $SDIR/Z.txt)"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-../configure --host=i686-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
+../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
@@ -42,7 +46,7 @@ export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
-../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
+RC="x86_64-w64-mingw32-windres -F pe-i386" CC="x86_64-w64-mingw32-gcc -m32" CXX="x86_64-w64-mingw32-g++ -m32"  ../mingw-w64-libraries/winpthreads/configure --host=i686-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?
 make install
@@ -53,8 +57,8 @@ rm -rf * .*
 
 cd ..
 
-i686-w64-mingw32-ar rcs out/lib/libssp.a
-i686-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
+x86_64-w64-mingw32-ar rcs out/lib/libssp.a
+x86_64-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
 
 mv out ../msvcrt32
 

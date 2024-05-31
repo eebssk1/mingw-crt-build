@@ -27,7 +27,7 @@ export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 dobuild(){
 cd build
 
-ARCH=haswell
+ARCH=x86-64-v3
 ONAME=
 if [ "$1" = "legacy" ]; then
 ARCH=ivybridge

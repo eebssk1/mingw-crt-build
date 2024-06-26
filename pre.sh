@@ -6,6 +6,7 @@ cd mingw-w64-mingw-w64
 
 for a in $SDIR/*.patch
 do
+[ -f "$a" ] || continue
 patch -p1 -N -i $a
 RES=$?
 if [ $RES != 0 ]; then

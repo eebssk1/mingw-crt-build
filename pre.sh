@@ -15,7 +15,7 @@ done
 
 cp mingw-w64-headers/include/msxml6.h mingw-w64-crt/libsrc/
 
-echo "UC: $(git rev-parse --short HEAD)" > ../time
+echo "UC: $(git log --no-decorate -1 --oneline)" > ../time
 uuidgen -r |cut -d '-' -f 1 > ../tag
 date "+%Y-%m-%d_%H:%M:%S_%z" >> ../time
 

@@ -29,7 +29,7 @@ fi
 
 cd $SDIR
 
-curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/8c4d2a0f/x86_64-w64-mingw32-cross.tb2" | tar --bz -xf -
+curl -L "https://github.com/eebssk1/aio_tc_build/releases/download/5688233d/x86_64-w64-mingw32-cross.tb2" | tar --bz -xf -
 
 if [ ! -e x86_64-w64-mingw32/x86_64-w64-mingw32/lib32 ]; then
 ln -s lib/32 x86_64-w64-mingw32/x86_64-w64-mingw32/lib32

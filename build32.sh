@@ -18,12 +18,13 @@ cd build
 
 export PATH=$SDIR/x86_64-w64-mingw32/bin:$PATH
 
-if [ "x$(which ccache)" != "x" ]; then
-export CC="ccache x86_64-w64-mingw32-gcc -m32"
-export CXX="ccache x86_64-w64-mingw32-g++ -m32"
-else
+
 export CC="x86_64-w64-mingw32-gcc -m32"
 export CXX="x86_64-w64-mingw32-g++ -m32"
+
+if [ "x$(which ccache)" != "x" ]; then
+export CC="ccache $CC"
+export CXX="ccache $CXX"
 fi
 
 
@@ -31,7 +32,7 @@ export AR="x86_64-w64-mingw32-gcc-ar"
 export NM="x86_64-w64-mingw32-gcc-nm"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 
-export CFLAGS="-march=prescott $(cat $SDIR/Z.txt)"
+export CFLAGS="-march=prescott @${SDIR}/Z.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
@@ -41,7 +42,7 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=prescott -fdata-sections $(cat $SDIR/f.txt)"
+export CFLAGS="-march=prescott @${SDIR}/f.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
@@ -57,8 +58,8 @@ rm -rf * .*
 
 cd ..
 
-x86_64-w64-mingw32-ar rcs out/lib/libssp.a
-x86_64-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
+x86_64-w64-mingw32-ar --target=pe-i386 rcs out/lib/libssp.a
+x86_64-w64-mingw32-ar --target=pe-i386 rcs out/lib/libssp_nonshared.a
 
 mv out ../msvcrt32
 

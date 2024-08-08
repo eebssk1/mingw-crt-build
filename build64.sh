@@ -37,7 +37,7 @@ if [ "$1" = "legacy_super" ]; then
 ARCH=core2
 ONAME=-legacy_super
 fi
-export CFLAGS="-march=$ARCH $(cat $SDIR/Z.txt)"
+export CFLAGS="-march=$ARCH @${SDIR}/Z.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 ../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
@@ -47,7 +47,7 @@ make install
 
 mv out ../
 
-export CFLAGS="-march=$ARCH -fdata-sections $(cat $SDIR/f.txt)"
+export CFLAGS="-march=$ARCH @${SDIR}/f.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*

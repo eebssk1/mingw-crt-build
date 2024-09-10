@@ -35,6 +35,8 @@ export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 export CFLAGS="-march=prescott @${SDIR}/Z.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
+export CPPFLAGS="-Wno-expansion-to-defined -I$PWD/../mingw-w64-headers/crt  -I$PWD/../mingw-w64-headers/include"
+
 ../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --with-libraries=pseh --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?

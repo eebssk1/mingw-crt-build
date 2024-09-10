@@ -40,6 +40,8 @@ fi
 export CFLAGS="-march=$ARCH @${SDIR}/Z.txt @${SDIR}/opt.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
+export CPPFLAGS="-Wno-expansion-to-defined -I$PWD/../mingw-w64-headers/crt  -I$PWD/../mingw-w64-headers/include"
+
 ../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out; checkreturn $?
 
 make -j3 all; checkreturn $?

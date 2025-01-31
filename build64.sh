@@ -1,11 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 export SDIR=$PWD
 
 cd mingw-w64-mingw-w64
-
-rm -rf build
-mkdir build
+export SDIR2=$PWD
 
 export PATH=$SDIR/x86_64-w64-mingw32/bin:$PATH
 
@@ -18,6 +16,19 @@ export AR="x86_64-w64-mingw32-gcc-ar"
 export NM="x86_64-w64-mingw32-gcc-nm"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 
+pushd mingw-w64-headers
+mkdir build
+pushd build
+../configure --host=x86_64-w64-mingw32 --prefix=$SDIR/heads --with-default-msvcrt=ucrt || exit 255
+make -j3 || exit 255
+make install
+popd
+rm -rf build
+popd
+
+rm -rf build
+mkdir build
+
 dobuild(){
 cd build
 
@@ -28,19 +39,19 @@ ARCH=westmere
 ONAME=-legacy
 fi
 
-export CFLAGS="-march=$ARCH @${SDIR}/Z.txt @${SDIR}/opt.txt"
+export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-export CPPFLAGS="-Wno-expansion-to-defined -I$PWD/../mingw-w64-headers/crt  -I$PWD/../mingw-w64-headers/include"
+export CPPFLAGS="-Wno-expansion-to-defined -isystem $SDIR/heads/include"
 
 ../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
 
 make -j3 all || exit 255
-make install
+make install-strip || make install
 
 mv out ../
 
-export CFLAGS="-march=$ARCH @${SDIR}/f.txt @${SDIR}/opt.txt"
+export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
@@ -48,7 +59,7 @@ rm -rf * .*
 ../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
 
 make -j3 all || exit 255
-make install
+make install-strip || make install
 
 cp -a out/. ../out/
 

@@ -44,7 +44,7 @@ export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined -isystem $SDIR/heads/include"
 
-../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --enable-wildcard --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
+../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
 
 make -j3 all || exit 255
 make install-strip || make install

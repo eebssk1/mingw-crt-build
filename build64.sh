@@ -19,18 +19,19 @@ export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 pushd mingw-w64-headers
 mkdir build
 pushd build
-../configure --host=x86_64-w64-mingw32 --prefix=$SDIR/heads --with-default-msvcrt=ucrt || exit 255
+../configure --host=x86_64-w64-mingw32 --prefix=$SDIR/out --with-default-msvcrt=ucrt || exit 255
 make -j3 || exit 255
 make install
 popd
 rm -rf build
 popd
+cp -R $SDIR/out $SDIR/out2
 
 rm -rf build
 mkdir build
 
 dobuild(){
-cd build
+pushd build
 
 ARCH=ivybridge
 ONAME=
@@ -42,35 +43,31 @@ fi
 export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-export CPPFLAGS="-Wno-expansion-to-defined -isystem $SDIR/heads/include"
+export CPPFLAGS="-Wno-expansion-to-defined"
 
-../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
+../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --prefix=$SDIR/out || exit 255
 
 make -j3 all || exit 255
 make install-strip || make install
-
-mv out ../
 
 export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 rm -rf * .*
 
-../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --disable-dependency-tracking --prefix=$(pwd)/out || exit 255
+../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --prefix=$SDIR/out || exit 255
 
 make -j3 all || exit 255
 make install-strip || make install
 
-cp -a out/. ../out/
-
 rm -rf * .*
 
-cd ..
+popd
 
 #x86_64-w64-mingw32-ar rcs out/lib/libssp.a
 #x86_64-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
 
-mv out ../ucrt64$ONAME
+mv ../out ../ucrt64$ONAME
 
 cp -a $SDIR/default-manifest_64.o ../ucrt64$ONAME/lib/default-manifest.o
 }

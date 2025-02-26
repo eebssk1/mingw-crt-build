@@ -32,6 +32,7 @@ mkdir build
 
 dobuild(){
 pushd build
+rm -rf * .*
 
 ARCH=ivybridge
 ONAME=
@@ -45,31 +46,18 @@ export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"
 
-../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --prefix=$SDIR/out || exit 255
+../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=ucrt --with-libraries=all --prefix=$SDIR/out || exit 255
 
 make -j3 all || exit 255
 make install-strip || make install
-
-export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
-export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
-
-rm -rf * .*
-
-../mingw-w64-libraries/winpthreads/configure --host=x86_64-w64-mingw32 --prefix=$SDIR/out || exit 255
-
-make -j3 all || exit 255
-make install-strip || make install
-
-rm -rf * .*
 
 popd
 
-#x86_64-w64-mingw32-ar rcs out/lib/libssp.a
-#x86_64-w64-mingw32-ar rcs out/lib/libssp_nonshared.a
+$AR rcs ../out/lib/libssp.a
+$AR rcs ../out/lib/libssp_nonshared.a
+cp -a $SDIR/default-manifest_64.o ../out/lib/default-manifest.o
 
 mv ../out ../ucrt64$ONAME
-
-cp -a $SDIR/default-manifest_64.o ../ucrt64$ONAME/lib/default-manifest.o
 }
 
 dobuild legacy

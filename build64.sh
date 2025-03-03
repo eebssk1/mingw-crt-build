@@ -57,6 +57,9 @@ $AR rcs ../out/lib/libssp.a
 $AR rcs ../out/lib/libssp_nonshared.a
 cp -a $SDIR/default-manifest_64.o ../out/lib/default-manifest.o
 
+mv ../out/lib64/* ../out/lib/ || true
+rm -rf ../out/lib64 || true
+
 mv ../out ../ucrt64$ONAME
 }
 

@@ -46,6 +46,9 @@ $AR rcs ../out/lib/libssp.a
 $AR rcs ../out/lib/libssp_nonshared.a
 cp $SDIR/default-manifest_32.o ../out/lib/default-manifest.o
 
+mv ../out/lib32/* ../out/lib/ || true
+rm -rf ../out/lib32 || true
+
 mv ../out ../msvcrt32
 
 exit 0

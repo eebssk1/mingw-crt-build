@@ -15,6 +15,7 @@ fi
 export AR="x86_64-w64-mingw32-gcc-ar"
 export NM="x86_64-w64-mingw32-gcc-nm"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
+export RC="x86_64-w64-mingw32-windres"
 
 pushd mingw-w64-headers
 mkdir build

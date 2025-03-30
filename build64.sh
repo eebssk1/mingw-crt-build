@@ -17,6 +17,8 @@ export NM="x86_64-w64-mingw32-gcc-nm"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 export RC="x86_64-w64-mingw32-windres"
 
+patch -p1 -i ../0001-crt-delayimp-Make-an-IAT-entry-writeable-before-modi.patch
+
 pushd mingw-w64-headers
 mkdir build
 pushd build

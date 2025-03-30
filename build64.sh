@@ -22,13 +22,12 @@ patch -p1 -i ../0001-crt-delayimp-Make-an-IAT-entry-writeable-before-modi.patch
 pushd mingw-w64-headers
 mkdir build
 pushd build
-../configure --host=x86_64-w64-mingw32 --prefix=$SDIR/out --with-default-msvcrt=ucrt || exit 255
+../configure --host=x86_64-w64-mingw32 --prefix=$SDIR/hdr --with-default-msvcrt=ucrt || exit 255
 make -j3 || exit 255
 make install
 popd
 rm -rf build
 popd
-cp -R $SDIR/out $SDIR/out2
 
 rm -rf build
 mkdir build
@@ -44,7 +43,7 @@ ARCH=westmere
 ONAME=-legacy
 fi
 
-export CFLAGS="-march=$ARCH @${SDIR}/f.txt"
+export CFLAGS="-march=$ARCH @${SDIR}/f.txt -isystem $SDIR/hdr/include"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"

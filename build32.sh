@@ -28,12 +28,10 @@ export NM="x86_64-w64-mingw32-gcc-nm --target=pe-i386"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 export RC="x86_64-w64-mingw32-windres --target=pe-i386"
 
-export CFLAGS="-march=westmere @${SDIR}/f.txt"
+export CFLAGS="-march=westmere @${SDIR}/f.txt -isystem $SDIR/hdr/include"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"
-
-mv $SDIR/out2 $SDIR/out
 
 ../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --with-libraries=all --prefix=$SDIR/out || exit 255
 

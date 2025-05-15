@@ -1,1 +1,1 @@
--pipe -O3 -g1 -D__1ENABLE_AGGRESSIVE_GRAPHITE9__ -flimit-function-alignment -falign-labels=8:6:4 -falign-functions=24 -falign-jumps=16:13:8 -falign-loops=16:13:8 -fmin-function-alignment=8 -fgcse-las -fgcse-sm -mtune=icelake-client -Wl,-O3,--relax,--sort-section=alignment,--sort-common=descending
+-pipe -O3 -g1 -D__1ENABLE_AGGRESSIVE_GRAPHITE9__ -flimit-function-alignment -fno-common -fgcse-las -fgcse-sm -falign-labels=8:7:4 -falign-functions=24:18 -fmin-function-alignment=16 -Wl,-O3,--relax,--sort-section=alignment,--sort-common=descending

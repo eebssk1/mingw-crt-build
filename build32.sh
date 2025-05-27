@@ -28,7 +28,7 @@ export NM="x86_64-w64-mingw32-gcc-nm --target=pe-i386"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 export RC="x86_64-w64-mingw32-windres --target=pe-i386"
 
-export CFLAGS="-march=westmere @${SDIR}/f.txt -isystem $SDIR/hdr/include"
+export CFLAGS="-march=haswell @${SDIR}/f.txt -fno-builtin -isystem $SDIR/hdr/include"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"

@@ -36,14 +36,14 @@ dobuild(){
 pushd build
 rm -rf * .*
 
-ARCH=ivybridge
+ARCH=haswell
 ONAME=
 if [ "$1" = "legacy" ]; then
 ARCH=westmere
 ONAME=-legacy
 fi
 
-export CFLAGS="-march=$ARCH @${SDIR}/f.txt -isystem $SDIR/hdr/include"
+export CFLAGS="-march=$ARCH @${SDIR}/f.txt -fno-builtin -isystem $SDIR/hdr/include"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"

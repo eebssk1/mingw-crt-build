@@ -28,12 +28,27 @@ export NM="x86_64-w64-mingw32-gcc-nm --target=pe-i386"
 export RANLIB="x86_64-w64-mingw32-gcc-ranlib"
 export RC="x86_64-w64-mingw32-windres --target=pe-i386"
 
-export CFLAGS="-march=haswell @${SDIR}/f.txt -fno-builtin -isystem $SDIR/hdr/include"
+CRT="ucrt"
+
+if [ "x$MS" != "x" ]; then
+CRT="msvcrt"
+SUF="_ms"
+fi
+
+export CFLAGS="-march=haswell @${SDIR}/f.txt -isystem $SDIR/hdr/include -I$SDIR/boot/include -L$SDIR/boot/lib -L$SDIR/boot/lib32"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined"
 
-../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=ucrt --with-libraries=all --prefix=$SDIR/out || exit 255
+rm -rf $SDIR/boot || true
+
+../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=$CRT --with-libraries=no --prefix=$SDIR/boot || exit 255
+make -j3 all || exit 255
+make install-strip || make install
+
+rm -rf * .* || true
+
+../configure --host=x86_64-w64-mingw32 --enable-lib32 --disable-lib64 --with-default-msvcrt=$CRT --with-libraries=all --prefix=$SDIR/out || exit 255
 
 make -j3 all || exit 255
 make install-strip || make install
@@ -47,6 +62,6 @@ cp $SDIR/default-manifest_32.o ../out/lib/default-manifest.o
 mv ../out/lib32/* ../out/lib/ || true
 rm -rf ../out/lib32 || true
 
-mv ../out ../msvcrt32
+mv ../out ../msvcrt32$SUF
 
 exit 0

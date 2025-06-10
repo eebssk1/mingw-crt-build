@@ -37,6 +37,16 @@ jobs:
         run: ./build32.sh
       - name: pack
         run: ./pack.sh
+      - name: build64
+        env:
+          MS: 1
+        run: ./build64.sh
+      - name: build32
+        env:
+          MS: 1
+        run: ./build32.sh
+      - name: pack
+        run: ./pack.sh
       - name: upload
         uses: actions/upload-artifact@v4
         with:

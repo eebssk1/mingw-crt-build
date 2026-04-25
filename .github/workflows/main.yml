@@ -5,7 +5,7 @@ jobs:
   main:
     name: main
     runs-on: ubuntu-latest
-    container: ghcr.io/eebssk1/bbk/debian-bookworm:latest
+    container: ghcr.io/eebssk1/debian-trixie:latest
 
     steps:
       - uses: actions/checkout@v1

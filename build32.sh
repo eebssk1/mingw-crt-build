@@ -38,7 +38,7 @@ fi
 export CFLAGS="-march=haswell @${SDIR}/f.txt -isystem $SDIR/hdr/include -I$SDIR/boot/include -L$SDIR/boot/lib -L$SDIR/boot/lib32"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
-export CPPFLAGS="-Wno-expansion-to-defined"
+export CPPFLAGS="-Wno-expansion-to-defined -B$SDIR/boot/lib -B$SDIR/boot/lib64"
 
 rm -rf $SDIR/boot || true
 

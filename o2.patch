@@ -1,0 +1,15 @@
+diff --git a/mingw-w64-crt/Makefile.in b/mingw-w64-crt/Makefile.in
+index ac6a932..d52173a 100644
+--- a/mingw-w64-crt/Makefile.in
++++ b/mingw-w64-crt/Makefile.in
+@@ -13755,8 +13755,8 @@ AM_DLLTOOLFLAGS = -k --as=$(AS) --output-lib $@ $(am__append_4) \
+ DLLTOOLFLAGSARM32 = -m arm
+ @ARM64EC_FALSE@DLLTOOLFLAGSARM64 = -m arm64
+ @ARM64EC_TRUE@DLLTOOLFLAGSARM64 = -m arm64ec
+-DLLTOOLFLAGS32 = --as-flags=--32 -m i386
+-DLLTOOLFLAGS64 = --as-flags=--64 -m i386:x86-64
++DLLTOOLFLAGS32 = --as-flags="--32 -O2" -m i386
++DLLTOOLFLAGS64 = --as-flags="--64 -O2" -m i386:x86-64
+ DTDEFARM32 = $(DLLTOOL) $(DLLTOOLFLAGSARM32) $(AM_DLLTOOLFLAGS) --input-def
+ DTDEFARM64 = $(DLLTOOL) $(DLLTOOLFLAGSARM64) $(AM_DLLTOOLFLAGS) --input-def
+ DTDEF32 = $(DLLTOOL) $(DLLTOOLFLAGS32) $(AM_DLLTOOLFLAGS) --input-def

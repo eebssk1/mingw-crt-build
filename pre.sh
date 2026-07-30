@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export SDIR=$PWD
 
@@ -34,5 +34,3 @@ curl -L "https://github.com/eebssk1/aio_tc_build/releases/latest/download/x86_64
 if [ ! -e x86_64-w64-mingw32/x86_64-w64-mingw32/lib32 ]; then
 ln -s lib/32 x86_64-w64-mingw32/x86_64-w64-mingw32/lib32
 fi
-
-

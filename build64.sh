@@ -63,6 +63,24 @@ make install-strip || make install
 
 rm -rf * .* || true
 
+mv $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/32 $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/.32
+rm -rf $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/*
+cp -ar $SDIR/boot/lib/* $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/
+mv $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/.32 $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/32
+cp $SDIR/default-manifest_64.o $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/default-manifest.o
+
+../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=$CRT --with-libraries=winpthreads --prefix=$SDIR/boot || exit 255
+make -j3 all || exit 255
+make install-strip || make install
+
+rm -rf * .* || true
+
+mv $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/32 $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/.32
+rm -rf $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/*
+cp -ar $SDIR/boot/lib/* $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/
+mv $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/.32 $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/32
+cp $SDIR/default-manifest_64.o $SDIR/x86_64-w64-mingw32/x86_64-w64-mingw32/lib/default-manifest.o
+
 ../configure --host=x86_64-w64-mingw32 --disable-lib32 --enable-lib64 --with-default-msvcrt=$CRT --with-libraries=all --prefix=$SDIR/out || exit 255
 
 make -j3 all || exit 255

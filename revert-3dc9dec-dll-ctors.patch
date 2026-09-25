@@ -136,16 +136,17 @@ index 7edf8360c91c182f8ec6e5a695c262332ee6c3ba..c8a5022ceba704ae2f43d689d8f3c1ca
  }
 -#endif
 diff --git a/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c b/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c
-deleted file mode 100644
-index 8143c6b72998473c4df1efa0654f36e59fbc2b53..0000000000000000000000000000000000000000
+index 8143c6b72998473c4df1efa0654f36e59fbc2b53..ad35d7294939f339d71284eb49e662bd67b14852 100644
 --- a/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c
-+++ /dev/null
-@@ -1,8 +0,0 @@
--/**
-- * This file has no copyright assigned and is placed in the Public Domain.
-- * This file is part of the mingw-w64 runtime package.
-- * No warranty is given; refer to the file DISCLAIMER.PD within this package.
-- */
--
++++ b/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c
+@@ -4,5 +4,8 @@
+  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
+  */
+ 
 -#define _MINGW_DLL_
 -#include "gccmain.c"
++/*
++ * Intentionally empty.  Keep this compatibility source because release
++ * snapshots carry a pregenerated Makefile.in which can still reference it.
++ * DLL constructors and destructors use the legacy __main path in crtdll.c.
++ */

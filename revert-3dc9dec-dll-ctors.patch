@@ -1,0 +1,151 @@
+diff --git a/mingw-w64-crt/Makefile.am b/mingw-w64-crt/Makefile.am
+index 61c2b3d18f7d95fcb7fccee0aecf025a8049b23a..7f943fde46f233eec442b7d1ebafc40f5d558c54 100644
+--- a/mingw-w64-crt/Makefile.am
++++ b/mingw-w64-crt/Makefile.am
+@@ -119,7 +119,6 @@ src_libntoskrnl=libsrc/memcmp.c
+ src_libdloadhelper=libsrc/dloadhelper.c misc/delay-f.c
+ 
+ src_libmingw32=include/internal.h include/sect_attribs.h crt/seh_signal_dispatcher.h \
+-  crt/mingw_dll_ctors_dtors.c \
+   crt/crtexewin.c     crt/dll_argv.c  crt/gccmain.c     crt/natstart.c  crt/pseudo-reloc-list.c  crt/wildcard.c \
+   crt/charmax.c       crt/ucrtexewin.c crt/dllargv.c    crt/_newmode.c  crt/tlssup.c             crt/xncommod.c \
+   crt/cinitexe.c      crt/merr.c      crt/pesect.c      crt/udllargc.c  crt/xthdloc.c \
+diff --git a/mingw-w64-crt/crt/crtdll.c b/mingw-w64-crt/crt/crtdll.c
+index 31a137f3401241ddbd002a15b1fb5bd610625aa8..65dca8daaf432f007fb332c7644f6d215ddaf6bc 100644
+--- a/mingw-w64-crt/crt/crtdll.c
++++ b/mingw-w64-crt/crt/crtdll.c
+@@ -17,8 +17,7 @@
+ #include <sect_attribs.h>
+ #include <locale.h>
+ 
+-extern void __cdecl __mingw_dll_do_global_ctors (void);
+-extern void __cdecl __mingw_dll_do_global_dtors (void);
++extern void __main ();
+ extern void _pei386_runtime_relocator (void);
+ extern _PIFV __xi_a[];
+ extern _PIFV __xi_z[];
+@@ -97,7 +96,7 @@ WINBOOL WINAPI _CRT_INIT (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
+ 	  if (ret != 0)
+ 	    goto i__leave;
+ 	  _initterm (__xc_a, __xc_z);
+-	  __mingw_dll_do_global_ctors ();
++	  __main ();
+ 
+ 	  __native_startup_state = __initialized;
+ 	}
+@@ -146,7 +145,6 @@ i__leave:
+ 	    __mingw_atexit_tls_callback_ptr (hDllHandle, dwReason, lpreserved);
+ 	  if (__mingw_dll_atexit_table_func_ptr != NULL)
+ 	    __mingw_dll_atexit_table_func_ptr (1 /*execute*/);
+-	  __mingw_dll_do_global_dtors ();
+ 
+ 	  __native_startup_state = __uninitialized;
+ 	}
+diff --git a/mingw-w64-crt/crt/gccmain.c b/mingw-w64-crt/crt/gccmain.c
+index 7edf8360c91c182f8ec6e5a695c262332ee6c3ba..c8a5022ceba704ae2f43d689d8f3c1caaeb35792 100644
+--- a/mingw-w64-crt/crt/gccmain.c
++++ b/mingw-w64-crt/crt/gccmain.c
+@@ -4,14 +4,11 @@
+  * No warranty is given; refer to the file DISCLAIMER.PD within this package.
+  */
+ 
+-#ifndef _MINGW_DLL_
+ int __cdecl atexit (void (__cdecl *)(void));
+-#endif
+ typedef void (*func_ptr) (void);
+ extern func_ptr __CTOR_LIST__[];
+ extern func_ptr __DTOR_LIST__[];
+ 
+-#ifndef _MINGW_DLL_
+ /* WARNING: All these functions must be in one translation unit.
+  * Otherwise linker can throw error "multiple definitions of __do_global_dtors"
+  * when linking with static libgcc library which also provides these symbols.
+@@ -19,10 +16,6 @@ extern func_ptr __DTOR_LIST__[];
+ void __do_global_dtors (void);
+ void __do_global_ctors (void);
+ void __main (void);
+-#else
+-void __cdecl __mingw_dll_do_global_dtors (void);
+-void __cdecl __mingw_dll_do_global_ctors (void);
+-#endif
+ 
+ /* __do_global_dtors is gcc ABI function which has to be exported.
+  * It executes all gcc dtors from __DTOR_LIST__ list under guard
+@@ -38,13 +31,8 @@ void __cdecl __mingw_dll_do_global_ctors (void);
+  *
+  * WARNING: Do not change ABI, name or behavior of this function.
+  */
+-#ifndef _MINGW_DLL_
+ void
+ __do_global_dtors (void)
+-#else
+-void __cdecl
+-__mingw_dll_do_global_dtors (void)
+-#endif
+ {
+   /* static initialization and incrementation before invocation of dtor
+    * ensures that repeated calls to __do_global_dtors() will not invoke
+@@ -73,27 +61,12 @@ __mingw_dll_do_global_dtors (void)
+  *
+  * WARNING: Do not change ABI, name or behavior of this function.
+  */
+-#ifndef _MINGW_DLL_
+ void
+ __do_global_ctors (void)
+-#else
+-void __cdecl
+-__mingw_dll_do_global_ctors (void)
+-#endif
+ {
+   __SIZE_TYPE__ nptrs = (__SIZE_TYPE__) __CTOR_LIST__[0];
+   __SIZE_TYPE__ i;
+ 
+-#ifdef _MINGW_DLL_
+-  /* Repeated calls to mingw DLL variant of this function
+-   * does not invoke ctors functions multiple times.
+-   */
+-  static int initialized = 0;
+-  if (initialized)
+-    return;
+-  initialized = 1;
+-#endif
+-
+   if (nptrs == (__SIZE_TYPE__) -1)
+     {
+       for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++);
+@@ -104,16 +77,9 @@ __mingw_dll_do_global_ctors (void)
+       __CTOR_LIST__[i] ();
+     }
+ 
+-  /* mingw DLL variant of this function does not schedule execution of
+-   * __do_global_dtors. Instead mingw DLL startup code calls the
+-   * __do_global_dtors explicitly.
+-   */
+-#ifndef _MINGW_DLL_
+   atexit (__do_global_dtors);
+-#endif
+ }
+ 
+-#ifndef _MINGW_DLL_
+ /* __main is gcc ABI function which has to be exported.
+  * It calls __do_global_ctors function under the guard.
+  *
+@@ -157,4 +123,3 @@ __main (void)
+       __do_global_ctors ();
+     }
+ }
+-#endif
+diff --git a/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c b/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c
+deleted file mode 100644
+index 8143c6b72998473c4df1efa0654f36e59fbc2b53..0000000000000000000000000000000000000000
+--- a/mingw-w64-crt/crt/mingw_dll_ctors_dtors.c
++++ /dev/null
+@@ -1,8 +0,0 @@
+-/**
+- * This file has no copyright assigned and is placed in the Public Domain.
+- * This file is part of the mingw-w64 runtime package.
+- * No warranty is given; refer to the file DISCLAIMER.PD within this package.
+- */
+-
+-#define _MINGW_DLL_
+-#include "gccmain.c"

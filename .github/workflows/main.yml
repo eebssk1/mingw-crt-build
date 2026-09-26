@@ -2,8 +2,6 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-      - "revert-3dc9dec-dll-ctors.patch"
 
 jobs:
   main:

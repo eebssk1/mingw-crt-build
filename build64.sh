@@ -43,7 +43,7 @@ dobuild(){
 pushd build
 rm -rf * .*
 
-ARCH=haswell
+ARCH=skylake
 ONAME=
 if [ "$1" = "legacy" ]; then
 ARCH=westmere

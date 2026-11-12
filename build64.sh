@@ -45,12 +45,17 @@ rm -rf * .*
 
 ARCH=skylake
 ONAME=
+TUNEFLAGS=
 if [ "$1" = "legacy" ]; then
 ARCH=westmere
 ONAME=-legacy
+elif [ "$1" = "broadwell" ]; then
+ARCH=broadwell
+ONAME=-broadwell
+TUNEFLAGS=" -mtune=icelake-client"
 fi
 
-export CFLAGS="-Wa,-O2 -march=$ARCH @${SDIR}/f.txt -isystem $SDIR/hdr/include -I$SDIR/boot/include -L$SDIR/boot/lib -L$SDIR/boot/lib64"
+export CFLAGS="-Wa,-O2 -march=$ARCH${TUNEFLAGS} @${SDIR}/f.txt -isystem $SDIR/hdr/include -I$SDIR/boot/include -L$SDIR/boot/lib -L$SDIR/boot/lib64"
 export CXXFLAGS="-fdeclone-ctor-dtor $CFLAGS"
 
 export CPPFLAGS="-Wno-expansion-to-defined -B$SDIR/boot/lib -B$SDIR/boot/lib64"
@@ -99,6 +104,7 @@ mv ../out ../ucrt64$ONAME$SUF
 }
 
 dobuild legacy
+dobuild broadwell
 dobuild
 
 exit 0
